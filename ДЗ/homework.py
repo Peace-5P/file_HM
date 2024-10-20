@@ -1,37 +1,30 @@
+from pprint import pprint
 
 
+#Задание N 1
+def cook_book(file_name):
+    """на выходе функции получим словарь с рецептами."""
+    cook_book = {}
+    with open(file_name, encoding='utf-8') as f:
+        for line in f:
+            dish_name = line.strip()
+            if not dish_name:
+                continue
+            count = int(next(f).strip())
+            ingr_list = []
+            for i in range(count):
+                ingr_name, quantity, measure = next(f).strip().split(' | ')
+                ingr_list.append({'ingredient_name': ingr_name, 'quantity': int(quantity), 'measure': measure})
+            cook_book[dish_name] = ingr_list
+    return cook_book
 
-#Задание N 1 и 2
-cook_book = {
-  'Омлет': [
-    {'ingredient_name': 'Яйцо', 'quantity': 2, 'measure': 'шт.'},
-    {'ingredient_name': 'Молоко', 'quantity': 100, 'measure': 'мл'},
-    {'ingredient_name': 'Помидор', 'quantity': 2, 'measure': 'шт'}
-    ],
-  'Утка по-пекински': [
-    {'ingredient_name': 'Утка', 'quantity': 1, 'measure': 'шт'},
-    {'ingredient_name': 'Вода', 'quantity': 2, 'measure': 'л'},
-    {'ingredient_name': 'Мед', 'quantity': 3, 'measure': 'ст.л'},
-    {'ingredient_name': 'Соевый соус', 'quantity': 60, 'measure': 'мл'}
-    ],
-  'Запеченный картофель': [
-    {'ingredient_name': 'Картофель', 'quantity': 1, 'measure': 'кг'},
-    {'ingredient_name': 'Чеснок', 'quantity': 3, 'measure': 'зубчик'},
-    {'ingredient_name': 'Сыр гауда', 'quantity': 100, 'measure': 'г'},
-    ],
-  'Фахитос': [
-    {'ingredient_name': 'Говядина', 'quantity': 500, 'measure': 'г'},
-    {'ingredient_name': 'Перец сладкий', 'quantity': 1, 'measure': 'шт'},
-    {'ingredient_name': 'Лаваш', 'quantity': 2, 'measure': 'шт'},
-    {'ingredient_name': 'Винный уксус', 'quantity': 1, 'measure': 'ст.л'},
-    {'ingredient_name': 'Помидор', 'quantity': 2, 'measure': 'шт'}]
-  }
 
+#Задание N 2
 def get_shop_list_by_dishes(dishes, person_count):
     """на выходе функции получим словарь с названием ингредиентов и его количества для блюда."""
     shop_list = {}
     for dish in dishes:
-        for item in cook_book[dish]:
+        for item in cook_book('dishes.txt')[dish]:
             if item['ingredient_name'] not in shop_list:
                 shop_list[item['ingredient_name']] = {}
                 shop_list[item['ingredient_name']]['measure'] = item['measure']
@@ -40,7 +33,9 @@ def get_shop_list_by_dishes(dishes, person_count):
                 shop_list[item['ingredient_name']]['quantity'] += item['quantity'] * person_count
     return shop_list
 
-print(get_shop_list_by_dishes(['Омлет', 'Фахитос'], 2))
+
+pprint(cook_book('dishes.txt'))
+pprint(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
 
 
 #Задание N 3
